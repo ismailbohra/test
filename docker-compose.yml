@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - sites:/usr/share/nginx/html
+    depends_on:
+      - node
+
+  postgresql:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  redis:
+    image: redis:7
+    container_name: redis
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-conf:/usr/local/etc/redis
+
+  node:
+    image: node:20
+    container_name: node
+    working_dir: /usr/src/app
+    volumes:
+      - node:/usr/src/app
+    command: ["node", "server.js"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgresql
+      - mongodb
+      - redis
+
+  nft:
+    image: python:3.11
+    container_name: nft
+    working_dir: /app
+    volumes:
+      - storage:/app/storage
+    command: ["python", "nft_service.py"]
+    depends_on:
+      - node
+
+volumes:
+  sites:
+  pg-data:
+  mongodb-data:
+  redis-conf:
+  node:
+  storage:
