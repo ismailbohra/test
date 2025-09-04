@@ -11,6 +11,7 @@ services:
       - ./config/nginx:/etc/nginx/conf.d
     depends_on:
       - node
+    restart: always
 
   postgresql:
     image: postgres:15
