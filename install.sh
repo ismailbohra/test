@@ -71,11 +71,15 @@ done
 echo "[*] Creating self-signed SSL certificate in netviss-storage..."
 
 # Create directories on host
-mkdir -p netviss-storage/certs/server netviss-storage/certs/privatekey
+echo "[*] Creating self-signed SSL certificate in netviss-storage..."
+
+# Create directories on host with proper permissions
+sudo mkdir -p ./netviss-storage/certs/server ./netviss-storage/certs/privatekey
+sudo chmod -R 755 ./netviss-storage
 
 # Generate cert + key if missing
 if [ ! -f ./netviss-storage/certs/server/default.crt ] || [ ! -f ./netviss-storage/certs/privatekey/default.key ]; then
-  openssl req -x509 -nodes -newkey rsa:2048 \
+  sudo openssl req -x509 -nodes -newkey rsa:2048 \
     -keyout ./netviss-storage/certs/privatekey/default.key \
     -out ./netviss-storage/certs/server/default.crt \
     -days 365 \
@@ -85,6 +89,7 @@ if [ ! -f ./netviss-storage/certs/server/default.crt ] || [ ! -f ./netviss-stora
 else
   echo "[*] SSL certificate already exists, skipping generation."
 fi
+
 
 
 # Start containers
