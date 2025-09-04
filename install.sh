@@ -55,8 +55,10 @@ sudo chmod -R 755 config
 # ⭐ Fetch nginx configs
 for file in portal.conf block-80.conf block-443.conf captive-frontend-8001.conf cp-80.conf cp-443.conf; do
     echo "Fetching nginx/$file..."
-    sudo curl -fsSL "$BASE_URL/config/nginx/$file" -o "config/nginx/$file" --create-dirs
+    curl -fsSL "$BASE_URL/config/nginx/$file" -o "/tmp/$file"
+    sudo mv /tmp/$file "config/nginx/$file"
 done
+
 
 # ⭐ Fetch postgres configs
 for file in postgresql.conf pg_hba.conf; do
