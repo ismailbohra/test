@@ -9,9 +9,6 @@ services:
       - sites:/usr/share/nginx/html
       - ./config/nginx:/etc/nginx/sites-available
       - ./config/nginx:/etc/nginx/conf.d
-    depends_on:
-      - node
-    restart: always
 
   postgresql:
     image: postgres:15
@@ -48,26 +45,26 @@ services:
   node:
     image: node:20
     container_name: node
-    working_dir: /usr/src/app
-    volumes:
-      - node:/usr/src/app
-    command: ["node", "server.js"]
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgresql
-      - mongodb
-      - redis
+    # working_dir: /usr/src/app
+    # volumes:
+    #   - node:/usr/src/app
+    # command: ["node", "server.js"]
+    # ports:
+    #   - "3000:3000"
+    # depends_on:
+    #   - postgresql
+    #   - mongodb
+    #   - redis
 
-  nft:
-    image: python:3.11
-    container_name: nft
-    working_dir: /app
-    volumes:
-      - storage:/app/storage
-    command: ["python", "nft_service.py"]
-    depends_on:
-      - node
+  # nft:
+  #   image: python:3.11
+  #   container_name: nft
+  #   working_dir: /app
+  #   volumes:
+  #     - storage:/app/storage
+  #   command: ["python", "nft_service.py"]
+  #   depends_on:
+  #     - node
 
 volumes:
   sites:
