@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
 
 # Variables
-GITHUB_REPO_URL="https://raw.githubusercontent.com/ismailbohra/test/main/docker-compose.yml"
+BASE_URL="https://raw.githubusercontent.com/ismailbohra/test/main"
 COMPOSE_FILE="docker-compose.yml"
 
 # Update apt once at the start
@@ -46,7 +46,22 @@ fi
 
 # Fetch docker-compose.yml
 echo "Fetching docker-compose.yml..."
-curl -fsSL "$GITHUB_REPO_URL" -o "$COMPOSE_FILE"
+curl -fsSL "$BASE_URL/docker-compose.yml" -o "$COMPOSE_FILE"
+
+# ⭐ Create config directories
+mkdir -p config/nginx config/postgres
+
+# ⭐ Fetch nginx configs
+for file in portal.conf block-80.conf block-443.conf captive-frontend-8001.conf cp-80.conf cp-443.conf; do
+    echo "Fetching nginx/$file..."
+    curl -fsSL "$BASE_URL/config/nginx/$file" -o "config/nginx/$file"
+done
+
+# ⭐ Fetch postgres configs
+for file in postgresql.conf pg_hba.conf; do
+    echo "Fetching postgres/$file..."
+    curl -fsSL "$BASE_URL/config/postgres/$file" -o "config/postgres/$file"
+done
 
 # Start containers
 echo "Starting containers..."
