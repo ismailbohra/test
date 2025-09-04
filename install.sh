@@ -67,6 +67,25 @@ for file in postgresql.conf pg_hba.conf; do
     sudo mv -f /tmp/$file "config/postgres/$file"
 done
 
+
+echo "[*] Creating self-signed SSL certificate..."
+
+# Create directories
+mkdir -p ./certs/server ./certs/privatekey
+
+# Generate cert + key if they don’t already exist
+if [ ! -f ./certs/server/default.crt ] || [ ! -f ./certs/privatekey/default.key ]; then
+  openssl req -x509 -nodes -newkey rsa:2048 \
+    -keyout ./certs/privatekey/default.key \
+    -out ./certs/server/default.crt \
+    -days 365 \
+    -subj "/C=US/ST=CA/L=SanFrancisco/O=Netviss/OU=Dev/CN=netviss.com"
+
+  echo "[*] SSL certificate generated at ./certs/"
+else
+  echo "[*] SSL certificate already exists, skipping generation."
+fi
+
 # Start containers
 echo "Starting containers..."
 sudo docker-compose -f "$COMPOSE_FILE" up -d
