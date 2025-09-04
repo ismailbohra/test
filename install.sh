@@ -63,7 +63,8 @@ done
 # ⭐ Fetch postgres configs
 for file in postgresql.conf pg_hba.conf; do
     echo "Fetching postgres/$file..."
-    sudo curl -fsSL "$BASE_URL/config/postgres/$file" -o "config/postgres/$file" --create-dirs
+    sudo curl -fsSL "$BASE_URL/config/postgres/$file" -o "/tmp/$file"
+    sudo mv /tmp/$file "config/postgres/$file"
 done
 
 # Start containers
