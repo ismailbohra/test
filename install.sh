@@ -46,27 +46,26 @@ fi
 
 # Fetch docker-compose.yml
 echo "Fetching docker-compose.yml..."
-curl -fsSL "$BASE_URL/docker-compose.yml" -o "$COMPOSE_FILE"
+sudo curl -fsSL "$BASE_URL/docker-compose.yml" -o "$COMPOSE_FILE"
 
-# ⭐ Create config directories with proper permissions
-mkdir -p config/nginx config/postgres
-chmod -R 755 config
+# ⭐ Create config directories with root permission
+sudo mkdir -p config/nginx config/postgres
+sudo chmod -R 755 config
 
 # ⭐ Fetch nginx configs
 for file in portal.conf block-80.conf block-443.conf captive-frontend-8001.conf cp-80.conf cp-443.conf; do
     echo "Fetching nginx/$file..."
-    curl -fsSL "$BASE_URL/config/nginx/$file" -o "config/nginx/$file" --create-dirs
+    sudo curl -fsSL "$BASE_URL/config/nginx/$file" -o "config/nginx/$file" --create-dirs
 done
 
 # ⭐ Fetch postgres configs
 for file in postgresql.conf pg_hba.conf; do
     echo "Fetching postgres/$file..."
-    curl -fsSL "$BASE_URL/config/postgres/$file" -o "config/postgres/$file" --create-dirs
+    sudo curl -fsSL "$BASE_URL/config/postgres/$file" -o "config/postgres/$file" --create-dirs
 done
-
 
 # Start containers
 echo "Starting containers..."
 sudo docker-compose -f "$COMPOSE_FILE" up -d
 
-echo "Setup completed."
+echo "✅ Setup completed."
