@@ -71,7 +71,7 @@ done
 echo "[*] Creating self-signed SSL certificate in netviss-storage..."
 
 # Create directories on host
-mkdir -p ./netviss-storage/certs/server ./netviss-storage/certs/privatekey
+mkdir -p netviss-storage/certs/server netviss-storage/certs/privatekey
 
 # Generate cert + key if missing
 if [ ! -f ./netviss-storage/certs/server/default.crt ] || [ ! -f ./netviss-storage/certs/privatekey/default.key ]; then
