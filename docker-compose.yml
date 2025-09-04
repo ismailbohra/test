@@ -9,6 +9,7 @@ services:
       - sites:/usr/share/nginx/html
       - ./config/nginx:/etc/nginx/sites-available
       - ./config/nginx:/etc/nginx/conf.d
+      - ./netviss-storage:/netviss-storage
 
   postgresql:
     image: postgres:14.9

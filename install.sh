@@ -68,23 +68,24 @@ for file in postgresql.conf pg_hba.conf; do
 done
 
 
-echo "[*] Creating self-signed SSL certificate..."
+echo "[*] Creating self-signed SSL certificate in netviss-storage..."
 
-# Create directories
-mkdir -p ./certs/server ./certs/privatekey
+# Create directories on host
+mkdir -p ./netviss-storage/certs/server ./netviss-storage/certs/privatekey
 
-# Generate cert + key if they don’t already exist
-if [ ! -f ./certs/server/default.crt ] || [ ! -f ./certs/privatekey/default.key ]; then
+# Generate cert + key if missing
+if [ ! -f ./netviss-storage/certs/server/default.crt ] || [ ! -f ./netviss-storage/certs/privatekey/default.key ]; then
   openssl req -x509 -nodes -newkey rsa:2048 \
-    -keyout ./certs/privatekey/default.key \
-    -out ./certs/server/default.crt \
+    -keyout ./netviss-storage/certs/privatekey/default.key \
+    -out ./netviss-storage/certs/server/default.crt \
     -days 365 \
     -subj "/C=US/ST=CA/L=SanFrancisco/O=Netviss/OU=Dev/CN=netviss.com"
 
-  echo "[*] SSL certificate generated at ./certs/"
+  echo "[*] SSL certificate generated under ./netviss-storage/"
 else
   echo "[*] SSL certificate already exists, skipping generation."
 fi
+
 
 # Start containers
 echo "Starting containers..."
