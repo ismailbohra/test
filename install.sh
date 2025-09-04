@@ -56,7 +56,7 @@ sudo chmod -R 755 config
 for file in portal.conf block-80.conf block-443.conf captive-frontend-8001.conf cp-80.conf cp-443.conf; do
     echo "Fetching nginx/$file..."
     curl -fsSL "$BASE_URL/config/nginx/$file" -o "/tmp/$file"
-    sudo mv /tmp/$file "config/nginx/$file"
+    sudo mv -f /tmp/$file "config/nginx/$file"
 done
 
 
@@ -64,7 +64,7 @@ done
 for file in postgresql.conf pg_hba.conf; do
     echo "Fetching postgres/$file..."
     curl -fsSL "$BASE_URL/config/postgres/$file" -o "/tmp/$file"
-    sudo mv /tmp/$file "config/postgres/$file"
+    sudo mv -f /tmp/$file "config/postgres/$file"
 done
 
 # Start containers
