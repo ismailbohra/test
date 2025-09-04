@@ -26,7 +26,7 @@ services:
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
 
   mongodb:
-    image: mongo:6
+    image: mongo:4.4
     container_name: mongodb
     ports:
       - "27017:27017"
