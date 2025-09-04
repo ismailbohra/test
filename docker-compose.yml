@@ -11,7 +11,7 @@ services:
       - ./config/nginx:/etc/nginx/conf.d
 
   postgresql:
-    image: postgres:15
+    image: postgres:14.9
     container_name: postgres
     environment:
       POSTGRES_USER: admin
@@ -21,9 +21,10 @@ services:
       - "5432:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
-      - ./config/postgres/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ./config/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+      # Mount Debian-style config structure for Postgres 14
+      - ./config/postgres/postgresql.conf:/etc/postgresql/14/main/postgresql.conf
+      - ./config/postgres/pg_hba.conf:/etc/postgresql/14/main/pg_hba.conf
+    command: postgres -c config_file=/etc/postgresql/14/main/postgresql.conf
 
   mongodb:
     image: mongo:4.4
